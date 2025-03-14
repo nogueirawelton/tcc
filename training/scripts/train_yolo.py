@@ -2,21 +2,22 @@ from ultralytics import YOLO
 import os
 
 
-model = YOLO('yolov8n.pt')
+model = YOLO('yolov8m.pt')
 results = model.train(
     data="dt.yaml",
-    epochs=100,
-    imgsz=640,
-    batch=8,
-    name='det_janelas',
+    epochs=150,            # Aumentar para mais ciclos de aprendizado
+    imgsz=800,             # Aumentar para melhor precisão
+    batch=8,               # Manter para equilíbrio entre precisão e memória
+    name='det_all',
     project="./runs",
     degrees=20,
-    flipud=0.5,
+    flipud=0.2,            # Reduzir para evitar layouts invertidos
     fliplr=0.5,
     scale=0.5,
     hsv_h=0.015,
     hsv_s=0.7,
     hsv_v=0.4,
-    mosaic=1.0,
-    mixup=0.2
+    mosaic=0.5,            # Reduzir para não sobrecarregar o modelo
+    mixup=0.2,
+    patience=20
 )
