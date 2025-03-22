@@ -2,13 +2,11 @@ import os
 
 
 class FileManager:
-    def __init__(self, base_path="app/temp"):
-        self.base_path = base_path
+    @staticmethod
+    def save(file, name):
+        path = os.path.join('app/tmp', name)
 
-    def save(self, file, name):
-        path = os.path.join(self.base_path, name)
-
-        with open(path, "wb") as f:
+        with open(path, 'wb') as f:
             f.write(file)
             f.close()
             return path
