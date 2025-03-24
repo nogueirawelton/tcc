@@ -1,6 +1,10 @@
+from os.path import join
+
+import cv2
 from fastapi import APIRouter, UploadFile
 
 from app.model.FloorPlan import FloorPlan
+from app.service.ocr_service import OCRService
 from app.service.yolo_service import YoloService
 from app.utils.file_manager import FileManager
 from app.service.pdf_service import PDFService
@@ -20,7 +24,9 @@ async def root(file: UploadFile):
 
     image_path = await PDFService.convert(pdf_path)
 
-    results = await YoloService.detect(image_path, "training/runs/det_all3/weights/best.pt", 0.3)
+    results = await YoloService.detect(image_path, "training/runs/det_all3/weights/best.pt", 0.5)
+
+    resultados = OCRService.extrair_texto(pdf_path, results['boxes'])
 
     # 3. Clean Files
 
@@ -30,4 +36,7 @@ async def root(file: UploadFile):
 
     floor_plan = FloorPlan(image_path, results['predict'])
 
-    return floor_plan.to_dict()
+    return {
+        'results': results,
+        'ocr': resultados,
+    }

@@ -2,3 +2,8 @@ fastapi
 uvicorn
 ultralytics
 pypdfium2
+starlette
+python-multipart
+pytesseract
+opencv-python-headless
+pymupdf

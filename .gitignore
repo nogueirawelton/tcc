@@ -20,7 +20,6 @@ pip-delete-this-directory.txt
 # Logs e arquivos temporários
 *.log
 *.out
-*.tmp
 *.swp
 
 # Arquivos do Jupyter Notebook
