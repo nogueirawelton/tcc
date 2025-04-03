@@ -18,25 +18,13 @@ async def root(file: UploadFile):
     # 1. Save Temporary PDF
 
     content = await file.read()
-    pdf_path = FileManager.save(content, file.filename)
+    doc = FileManager.save(content, file.filename)
 
     # 2. Do Something
 
-    image_path = await PDFService.convert(pdf_path)
-
-    results = await YoloService.detect(image_path, "training/runs/det_all3/weights/best.pt", 0.5)
-
-    resultados = OCRService.extrair_texto(pdf_path, results['boxes'])
-
-    # 3. Clean Files
-
-    FileManager.remove(pdf_path)
+    floor_plan = FloorPlan(doc)
+    predict = await floor_plan.get_predict()
 
     # 4. Build Response
 
-    floor_plan = FloorPlan(image_path, results['predict'])
-
-    return {
-        'results': results,
-        'ocr': resultados,
-    }
+    return predict
